@@ -1,1 +1,1 @@
-# TIME ENTRY SYSTEM
+# python_time_manager
