@@ -24,7 +24,7 @@ Ok, I have made a decision on the data base schema. I did some more web searchin
 
 So my new database schema will be as follows:
 
-![schema](documents/images/database_design.png "Database Schema")
+![schema](images/database_design.png "Database Schema")
 
 How to describe this?: one ```User``` can have many ```Events```, and one ```Project``` can have many ```Events```, but one Event only has one User and one ```Project```.
 
@@ -97,7 +97,7 @@ Now, in looking up events, would I really need to look at an associative table t
 
 So now our database schema would then look something like this:
 
-![original schema](documents/images/orig_database_design.png "Original Database Schema")
+![original schema](images/orig_database_design.png "Original Database Schema")
 
 This is a ternary relationship. Here, a user is linked to many projects, and can link to a single event. Also, a single project can link to many users and their individual events. But a project will only have events related to it. So from the project perspective, you can look at events from all users or events of a specific user, in that project. When you look at events from the user perspective, you can see all the events for all the projects they worked on, or events limited to a specific project.
 
