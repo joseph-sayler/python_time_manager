@@ -1,0 +1,112 @@
+# TIME ENTRY SYSTEM
+
+## Goal
+
+The goal of this project is to create a time entry system in Python.
+
+## Inspiration
+
+Currently for work, I manually manage a markdown file where I enter the date, current project, time spent on an activity, then a total at the end of the day of all time spent on all activities. I do this over and over and over... again, and thought it would be nice to have an automated way to do this!
+
+## Plan
+
+Right now this is very much WIP, but my thoughts are to create a core system that takes in all data and stores it in a database (sqlite for now). Once I have input figured out, then will tackle output. I will probably wrap this in a command line interface to start, but should probably make it flexible enough to use with any kind of program. The goal would be to make a web app or maybe a small desktop app to run the core components inside of.
+
+First steps though are making the core data intake engine and saving data to a db. With that done, I can work on a simple CLI to test. Then move on to displaying data back, another front end (web app perhaps), add some extra bells and whistles, all until I have what I want!
+
+The rest of this README will contain notes about my thoughts, progress I make,and ideas I have.
+
+## Notes
+
+### 2023-01-18
+
+Ok, I have made a decision on the data base schema. I did some more web searching and found a near perfect example [here](https://stackoverflow.com/a/65984044) of what I am looking for. This answer basically states what I initially thought at the begining of yesterday's ponderings.
+
+So my new database schema will be as follows:
+
+![schema](documents/images/database_design.png "Database Schema")
+
+How to describe this?: one ```User``` can have many ```Events```, and one ```Project``` can have many ```Events```, but one Event only has one User and one ```Project```.
+
+Based on this description, I think the UML image describes what I want. The "only one ```User``` and ```Project```" might have to be enforced via the ORM though. I think intrinsicly this schema will impose that, which is why I am leaning towards it. So **now** I can move on to the ORM...
+
+### 2023-01-17
+
+#### Idea for SQL tables
+
+The idea is to have a set of tables representing the data and their relationships. There will be three tables total: ```User```, ```Project```, and ```Event```.
+
+- ```User``` represents a person using the application.
+- ```Project``` represents something being worked on (a, uh, project?). 
+- ```Event``` is the start/stop time user spent working on project.
+
+##### Project Tables
+
+Each table should have the following fields:
+
+|  **User**  |     **Project**     |  **Event**  |
+| :--------: | :-----------------: | :---------: |
+|  user id   |     project id      |  event id   |
+|  username  |    project name     |    date     |
+|   email    | project description | start time  |
+| first name |                     |  end time   |
+| last name  |                     | description |
+
+The above does not include cross linking IDs between tables. I was thinking of linking the tables as follows
+
+##### Relationship between tables
+
+- User has a one to many relationship with Event
+    - one user can create multiple events
+- Project has a one to many relationship with Event
+    - one project has many events
+- Event has a one to one relationship with Project
+    - one event can only belong to one project
+  - Event has a one to one relationship with User
+    - one event can only be created by one user
+- User has a many to many relationship with Project
+    - one user can be in many projects, and one project can have many users
+    - but no one unique user can be in the same unique project twice:interrobang:
+
+Example of User relationship to Project:
+- Project 1 -- Users: UserA, UserB, UserC
+- Project 2 -- Users: UserA, UserC
+- Project 3 -- Users: UserB, UserC, UserD, UserE
+- Project 4 -- Users: {{EMPTY}}
+
+User A cannot be in Project1 twice, so one user per many projects, but Project1 can have many users other than User A...
+
+But UserA can be in Project 2 at the same time as Project 1. Also, UserC can be in the same projects (or more) as UserA. Also a project could have NO users. So what is relationship between User and Project?
+
+This would mean that I can have many users assigned to many projects and many projects can have many users. So this is a Many to Many relationship. That means we need a intermediary table, or an **association table**. By creating a 4th table that only has the primary keys of the other 2, we can link everything up without duplication :sunglasses:
+
+Despite the above, now I am questioning the Event table. I want the event table to be linked to the user that creates it, but also to be a part of a project. I guess one could have events without projects, but that seems silly to me. So do i keep projects as a separate table or do I include it with events? Because I definately want a user to be tied to an event. But it still holds that one event can only have 1 user and 1 project associated with it. So that would make Event table 1-to-1 with User table and 1-to-1 with Project table. It almost seems like Event table could be used as an association table, doesn't it?
+
+Lets look at it again: UserA is in Project1 with users UserB and UserC. UserA is also in Project2 with UserB and UserD. UserA does work on Project1, creating an event for Project1. UserA later works on Project2, creating a separate event for Project2. So we have event UserA-Project1 and UserA-Project2. UserB does the same thing, now adding in UserB-Project1 and UserB-Project2. UserC and UserD do same for their projects, giving us UserC-Project1 and UserD-Project2. Now look at what we got:
+
+- UserA-Project1
+- UserA-Project2
+- UserB-Project1
+- UserB-Project2
+- UserC-Project1
+- UserD-Project2
+
+By way of our associative table, we cannot have any user in any project more than once. So would it be safe to say that there is no way to create an event that might do the same? Yes, I think this is true.
+
+Now, in looking up events, would I really need to look at an associative table to get this information? No, I could go straight to the Event table. So why not have Event contain an event id and its related data, like how the other two tables are, and create one large associative table for all 3?
+
+So now our database schema would then look something like this:
+
+![original schema](documents/images/orig_database_design.png "Original Database Schema")
+
+This is a ternary relationship. Here, a user is linked to many projects, and can link to a single event. Also, a single project can link to many users and their individual events. But a project will only have events related to it. So from the project perspective, you can look at events from all users or events of a specific user, in that project. When you look at events from the user perspective, you can see all the events for all the projects they worked on, or events limited to a specific project.
+
+I think this will work and adequately describes my idea of how these three components interact. Event is a 1:1:1 with User and Project, User is a 1:M:M in regards to Event and Project, and so is Project (1:M:M) in regards to User and Event.
+
+Now, how to model this using an ORM:interrobang:
+
+### 2023-01-16
+
+Because this app will take user input, I want to use pydantic to validate that input. But I will also be storing data in a data base, so SQLAlchemy would also be required (I could use some other ORM, but SQLAlchemy has a lot going for it). I have been looking for a way to combine models created by these two libraries, but there really isn't much out there. There is [ormar](https://github.com/collerek/ormar), but I feel it is geared towards [FastAPI](https://fastapi.tiangolo.com/) and Async programming, neither of which I plan on using (right now!).
+
+I did some poking around the internet, found [this Reddit post from a few years ago](https://www.reddit.com/r/FastAPI/comments/lmywl6/comment/gnzdno1/?utm_source=share&utm_medium=web2x&context=3), and it seems to explain things nicely, even if oriented towards FastAPI. So I think I will bite the bullet and just make models for each. I can use the ```from_orm()``` function to pop data from ORM to Pydantic, which is nice. Not sure if it goes the other way (probably?). But I will figure that out later. For now it should be enough to come up with a schema of data entry and database schema to hold me over...

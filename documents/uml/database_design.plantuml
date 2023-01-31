@@ -1,0 +1,36 @@
+@startuml
+
+hide circle
+skinparam linetype ortho
+
+entity "User" as usr {
+    * userID: uuid <<PK>>
+    --
+    * username: text
+    * email: text
+    first name: text
+    last name: text
+}
+
+entity "Event" as evn {
+    * eventID: uuid <<PK>>
+    * userID: uuid <<FK>>
+    * projectID: uuid <<FK>>
+    --
+    * date: date
+    * start: time
+    * end: time
+    description: text
+}
+
+entity "Project" as pro {
+    * projectID: uuid <<PK>>
+    --
+    * name: text
+    description: text
+}
+
+usr ||-|{ evn
+pro ||--|{ evn
+
+@enduml
