@@ -1,24 +1,16 @@
-# TIME ENTRY SYSTEM
+# TIME ENTRY SYSTEM BLOG
 
-## Goal
+## 2023-02-02
 
-The goal of this project is to create a time entry system in Python.
+Alright back at it after several weeks of break!
 
-## Inspiration
+I have taken the models made last time and put them into the models folder in the projects folder, in a tables.py file. I have successfully added and queried the data in the sqlite database. This is looking good!
 
-Currently for work, I manually manage a markdown file where I enter the date, current project, time spent on an activity, then a total at the end of the day of all time spent on all activities. I do this over and over and over... again, and thought it would be nice to have an automated way to do this!
+Now that the basics are set up, I can start creating my CRUD engine (hehe). This will hold the basic <b>C</b>reate, <b>R</b>ead, <b>U</b>pdate, and <b>D</b>elete wrapper commands to be used by rest of application. I am going to start out small and build up as I need to. I have created a folder called 'crud' and each action is a separate file, so there is a ```create.py```, ```read.py```, ```update.py```, and ```delete.py```. I figure this is good enough until I develop a better picture of what this will turn into. Each file contains a function that handles the basic operation. More than likely this will change as time goes on.
 
-## Plan
+So far running into challenges with session object and getting VSCode to recognize imports. May need to turn pylint off since it is really throwing a lot of errors! I will continue to work on this and see how far I get ....
 
-Right now this is very much WIP, but my thoughts are to create a core system that takes in all data and stores it in a database (sqlite for now). Once I have input figured out, then will tackle output. I will probably wrap this in a command line interface to start, but should probably make it flexible enough to use with any kind of program. The goal would be to make a web app or maybe a small desktop app to run the core components inside of.
-
-First steps though are making the core data intake engine and saving data to a db. With that done, I can work on a simple CLI to test. Then move on to displaying data back, another front end (web app perhaps), add some extra bells and whistles, all until I have what I want!
-
-The rest of this README will contain notes about my thoughts, progress I make,and ideas I have.
-
-## Notes
-
-### 2023-01-18
+## 2023-01-18
 
 Ok, I have made a decision on the data base schema. I did some more web searching and found a near perfect example [here](https://stackoverflow.com/a/65984044) of what I am looking for. This answer basically states what I initially thought at the begining of yesterday's ponderings.
 
@@ -30,9 +22,9 @@ How to describe this?: one ```User``` can have many ```Events```, and one ```Pro
 
 Based on this description, I think the UML image describes what I want. The "only one ```User``` and ```Project```" might have to be enforced via the ORM though. I think intrinsicly this schema will impose that, which is why I am leaning towards it. So **now** I can move on to the ORM...
 
-### 2023-01-17
+## 2023-01-17
 
-#### Idea for SQL tables
+### Idea for SQL tables
 
 The idea is to have a set of tables representing the data and their relationships. There will be three tables total: ```User```, ```Project```, and ```Event```.
 
@@ -40,7 +32,7 @@ The idea is to have a set of tables representing the data and their relationship
 - ```Project``` represents something being worked on (a, uh, project?). 
 - ```Event``` is the start/stop time user spent working on project.
 
-##### Project Tables
+#### Project Tables
 
 Each table should have the following fields:
 
@@ -54,7 +46,7 @@ Each table should have the following fields:
 
 The above does not include cross linking IDs between tables. I was thinking of linking the tables as follows
 
-##### Relationship between tables
+#### Relationship between tables
 
 - User has a one to many relationship with Event
     - one user can create multiple events
@@ -105,7 +97,7 @@ I think this will work and adequately describes my idea of how these three compo
 
 Now, how to model this using an ORM:interrobang:
 
-### 2023-01-16
+## 2023-01-16
 
 Because this app will take user input, I want to use pydantic to validate that input. But I will also be storing data in a data base, so SQLAlchemy would also be required (I could use some other ORM, but SQLAlchemy has a lot going for it). I have been looking for a way to combine models created by these two libraries, but there really isn't much out there. There is [ormar](https://github.com/collerek/ormar), but I feel it is geared towards [FastAPI](https://fastapi.tiangolo.com/) and Async programming, neither of which I plan on using (right now!).
 
