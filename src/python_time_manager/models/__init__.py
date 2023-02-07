@@ -1,1 +1,1 @@
-from .tables import Base, User, Project, Event
+from .tables import Base, User, Project, Event, ProjectUsers

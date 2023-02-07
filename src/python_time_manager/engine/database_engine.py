@@ -47,15 +47,28 @@ class DatabaseEngine:
         :return: the found record containing all fields from table
         :rtype: dict[str, str]
         """
-        query = self.__query_results(table=table, ident=ident)
+        query: Query[Table] = self.__query_results(table=table, ident=ident)
         if query:
             return self._asdict(next(iter(query)))
         return {}
 
-    def update(self):
-        pass
+    def update(self, table: str, ident: str):
+        query = self.__query_results(table=table, ident=ident)
+        if query:
+            # do something
+            return True
+        return False
 
-    def delete(self, table: str, ident: str):
+    def delete(self, table: str, ident: str) -> bool:
+        """delete a record from target table
+
+        :param table: name of table to delete data from
+        :type table: str
+        :param ident: id number of the record to delete
+        :type ident: str
+        :return: indication of successful deletion
+        :rtype: bool
+        """
         query = self.__query_results(table=table, ident=ident)
         if query:
             query.delete()
@@ -64,12 +77,27 @@ class DatabaseEngine:
         return False
 
     def __query_results(self, table: str, ident: str) -> Query[Table]:
+        """common code to query results from database
+
+        :param table: name of table to search
+        :type table: str
+        :param ident: the ID of record to find
+        :type ident: str
+        :return: SQLAlchemy object containing results
+        :rtype: Query[Table]
+        """
         return self.__session.query(self.__TABLE_STRUCT[table.lower()]).filter_by(
             id=ident
         )
 
     @staticmethod
     def _asdict(obj: Query[Table]) -> dict[str, str]:
-        """uses inspect to grab columns + their data and put in a dict"""
-        insp = inspect(obj).mapper.column_attrs # type: ignore
+        """uses inspect to grab columns + their data and put in a dict
+
+        :param obj: the object to inspect
+        :type obj: Query[Table]
+        :return: data from obj returned as key:value pairs
+        :rtype: dict[str, str]
+        """
+        insp = inspect(obj).mapper.column_attrs  # type: ignore
         return {c.key: getattr(obj, c.key) for c in insp}
