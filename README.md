@@ -1,10 +1,14 @@
 # python_time_manager
-## Documentation
 
-Documentation available at [https://joseph-sayler.github.io/python_time_manager/](https://joseph-sayler.github.io/python_time_manager/)
 ## Goal
 
 The goal of this project is to create a time entry system in Python.
+
+## Documentation
+
+[![pages-build-deployment](https://github.com/joseph-sayler/python_time_manager/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/joseph-sayler/python_time_manager/actions/workflows/pages/pages-build-deployment)
+
+Documentation available at [https://joseph-sayler.github.io/python_time_manager/](https://joseph-sayler.github.io/python_time_manager/)
 
 ## Inspiration
 
