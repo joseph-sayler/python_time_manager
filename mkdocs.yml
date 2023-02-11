@@ -1,11 +1,52 @@
 site_name: Time Manager Docs
+site_author: "Joseph Sayler"
+site_description: "Python Time Manager project created by Joseph Sayler"
+
+repo_url: https://github.com/joseph-sayler/python_time_manager
+repo_name: "python_time_manager"
+
+site_url: https://joseph-sayler.github.io/python_time_manager/
+edit_uri: "blob/main/docs"
 
 theme:
-  name: "readthedocs"
+  name: "material"
+  font: false
+  icon:
+    logo: material/library-outline
+    repo: fontawesome/brands/github
+  palette: 
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    
 
 plugins:
   - search
   - mkdocstrings
+  - offline
+  - git-revision-date-localized:
+      enable_creation_date: true
+      fallback_to_build_date: true
+      type: timeago
 
 nav:
   - Time Manager Docs: index.md

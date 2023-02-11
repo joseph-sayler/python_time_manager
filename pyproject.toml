@@ -17,6 +17,8 @@ alembic = "^1.9.2"
 mimesis = "^7.0.0"
 mkdocs = "^1.4.2"
 mkdocstrings = {extras = ["python"], version = "^0.20.0"}
+mkdocs-material = "^9.0.12"
+mkdocs-git-revision-date-localized-plugin = "^1.1.0"
 
 
 [build-system]
