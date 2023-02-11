@@ -1,0 +1,19 @@
+site_name: Time Manager Docs
+
+theme:
+  name: "readthedocs"
+
+plugins:
+  - search
+  - mkdocstrings
+
+nav:
+  - Time Manager Docs: index.md
+  - Reference:
+    - Database Engine:
+      - DatabaseEngine: db_engine.md
+    - Database Models:
+      - Event: model_event.md
+      - Project: model_project.md
+      - ProjectUsers: model_project_users.md
+      - User: model_user.md
