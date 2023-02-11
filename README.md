@@ -6,6 +6,7 @@ The goal of this project is to create a time entry system in Python.
 
 ## Documentation
 
+[![mkdocs build](https://github.com/joseph-sayler/python_time_manager/actions/workflows/main.yml/badge.svg)](https://github.com/joseph-sayler/python_time_manager/actions/workflows/main.yml)
 [![pages-build-deployment](https://github.com/joseph-sayler/python_time_manager/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/joseph-sayler/python_time_manager/actions/workflows/pages/pages-build-deployment)
 
 Documentation available at [https://joseph-sayler.github.io/python_time_manager/](https://joseph-sayler.github.io/python_time_manager/)
