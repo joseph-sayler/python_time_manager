@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'src/python_time_manager/engine/**'
+      - 'src/python_time_manager/models/**'
+      - 'docs/**'
 jobs:
   deploy:
     runs-on: ubuntu-latest
