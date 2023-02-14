@@ -1,8 +1,6 @@
 # pylint: skip-file
 
 from datetime import datetime, date
-from typing import Any
-import uuid
 from sqlalchemy.orm import Relationship, relationship, declarative_base
 from sqlalchemy import Column, String, ForeignKey, DateTime, Date, func
 
