@@ -1,5 +1,17 @@
 # TIME ENTRY SYSTEM BLOG
 
+## 2023-02-13
+
+Wow, rocky start today on this thing. I had made some major booboos with the SQLAlchemy models a few days ago that had to be cleaned up. But first, I ADDED DOCUMENTATION!
+
+Yes, if you go to [this site](https://joseph-sayler.github.io/python_time_manager/index.html) (which is just a gh-pages site for this repo), you will see my lovely new documentation! It uses [mkdocs](https://www.mkdocs.org/) and the [material](https://squidfunk.github.io/mkdocs-material/) theme to make a very nice looking documentation page. And, it is all generated from my code!! I even set up a GitHub Action to handle generating it after I push commits. Super cool!!
+
+Ok now for the SQLAlchemy models. I messed up. I did not know this, but type annotations on Relationships can really mess things up if you do not implement them right. I had used the generic Any to describe what model went with the relationship and it messed things up! It took me forever to figure it out too. I tried using the model (class name) but because of how I have the folder structure set up, I was getting partial import errors. So I just removed them! Problem solved! they aren't really necessary and I am not sure why I put them there to begin with.
+
+Aside from that, I did some nice testing of the database schema and found that I really needed to set up a relationship between Event and User so that I can query a user for events to get only the events that user entered. And Project is already set up to link with Event so now I can check the project an event goes to very easily. And because i used ```back_populates```, I have access to all this info from either direction -  User -> Event, Event -> User, or Project -> Event, Event -> Project.
+
+I think next I should tackle unit tests, but I have to set up the ```update``` method for the database engine...
+
 ## 2023-02-02
 
 Alright back at it after several weeks of break!
