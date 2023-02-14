@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://joseph-sayler.github.io/python_time_manager/index.html</loc>
+         <lastmod>2023-02-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://joseph-sayler.github.io/python_time_manager/db_engine.html</loc>
+         <lastmod>2023-02-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://joseph-sayler.github.io/python_time_manager/model_event.html</loc>
+         <lastmod>2023-02-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://joseph-sayler.github.io/python_time_manager/model_project.html</loc>
+         <lastmod>2023-02-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://joseph-sayler.github.io/python_time_manager/model_project_users.html</loc>
+         <lastmod>2023-02-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://joseph-sayler.github.io/python_time_manager/model_user.html</loc>
+         <lastmod>2023-02-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
