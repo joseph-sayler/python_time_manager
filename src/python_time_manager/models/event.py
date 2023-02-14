@@ -1,18 +1,18 @@
 # pylint: skip-file
 
+from ..engine._gen_uuid import _generate_uuid
+
 from . import (
     Base,
     Column,
     String,
     datetime,
-    Relationship,
-    Any,
     relationship,
     ForeignKey,
     DateTime,
-    uuid,
     func,
 )
+
 
 class Event(Base):
     """A table that holds information about time entries (events) entered by user for a project. This table is related to the `User` table through a many-to-one relationship. This means that a single user may have multiple events, but each event is associated with only one user. This relationship is established through the `Project` table, as each event is linked with a single project, and by association, each project is linked with a single user.
@@ -30,14 +30,23 @@ class Event(Base):
 
     __tablename__: str = "event"
 
-    id: Column[str] = Column(String(36), primary_key=True, default=str(uuid.uuid4()))
+    id: Column[str] = Column(String(36), primary_key=True, default=_generate_uuid)
     start_datetime: Column[datetime] = Column(DateTime, nullable=True)
     end_datetime: Column[datetime] = Column(DateTime, nullable=True)
     description: Column[str] = Column(String(250), nullable=True)
     created_at: Column[datetime] = Column(DateTime, default=func.now(), nullable=False)
-    project_id: Column[str] = Column(String(36), ForeignKey("project.id"))
+    project_id: Column[str] = Column(String(36), ForeignKey("project.id"), nullable=False)
+    user_id: Column[str] = Column(String(36), ForeignKey("user.id"), nullable=False)
 
-    project: Relationship[Any] = relationship("Project", back_populates="events")
+    # setting the type annotation with a generic such as Any will result in
+    # errors as SQLAlchemy can use the type annotation to learn more about
+    # the relationship; to remedy, put name of table in square brackets
+    # instead of Any; however, due to potential circular imports, I have
+    # chosen to leave the annotation off entirely, which is perfectly valid
+    # and causes no issues at all
+
+    project = relationship("Project", back_populates="events")
+    user = relationship("User", back_populates="events")
 
     def __repr__(self) -> str:
         """Displays a string representation of the object. Only displays the id and created_at fields for reference.

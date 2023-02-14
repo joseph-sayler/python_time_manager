@@ -1,5 +1,7 @@
 # pylint: skip-file
 
+from ..engine._gen_uuid import _generate_uuid
+
 from . import (
     Base,
     Column,
@@ -7,14 +9,12 @@ from . import (
     Date,
     date,
     datetime,
-    Relationship,
-    Any,
     relationship,
     ForeignKey,
     DateTime,
-    uuid,
     func,
 )
+
 
 class Project(Base):
     """A table that holds information about projects.
@@ -40,7 +40,7 @@ class Project(Base):
 
     __tablename__: str = "project"
 
-    id: Column[str] = Column(String(36), primary_key=True, default=str(uuid.uuid4()))
+    id: Column[str] = Column(String(36), primary_key=True, default=_generate_uuid)
     name: Column[str] = Column(String(250), nullable=False)
     description: Column[str] = Column(String(512), nullable=True)
     start_date: Column[date] = Column(Date, nullable=True)
@@ -50,10 +50,15 @@ class Project(Base):
     manager_id: Column[str] = Column(String(36), ForeignKey("user.id"), nullable=True)
     created_at: Column[datetime] = Column(DateTime, default=func.now(), nullable=False)
 
-    users: Relationship[Any] = relationship(
-        "User", secondary="project_users", back_populates="projects"
-    )
-    events: Relationship[Any] = relationship("Event", back_populates="project")
+    # setting the type annotation with a generic such as Any will result in
+    # errors as SQLAlchemy can use the type annotation to learn more about
+    # the relationship; to remedy, put name of table in square brackets
+    # instead of Any; however, due to potential circular imports, I have
+    # chosen to leave the annotation off entirely, which is perfectly valid
+    # and causes no issues at all
+
+    users = relationship("User", secondary="project_users", back_populates="projects")
+    events = relationship("Event", back_populates="project")
 
     def __repr__(self) -> str:
         """Displays a string representation of the object. Only displays the id and created_at fields for reference.
